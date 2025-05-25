@@ -1,6 +1,6 @@
 # **Go Get It (Reverse)**
 
-In the challenge we get a [windows executable](https://github.com/MedjberAbderrahim/CTF-Writeups/blob/main/El-Djazair%20CTF/Reverse%20Engineering/Go%20Get%20It/GoGetIt.exe) (.exe), which spawns a simple flag-checking GUI application.
+In the challenge we get a [windows executable](https://github.com/MedjberAbderrahim/CTF-Writeups/blob/main/El-Djazair%20CTF/Reverse%20Engineering/Go%20Get%20It/solution/GoGetIt.exe) (.exe), which spawns a simple flag-checking GUI application.
 
 ## **Reconnaissance**
 
@@ -122,7 +122,7 @@ __int64 __golang main_checkFlag(_BYTE *a1, __int64 a2){
 }
 ```
 
-It's ASCII codes manipulation with a base64, we can reverse the process or send the code to AI, and receive a result script (prefferably in python) that generates such a string, the script I received is [this](https://github.com/MedjberAbderrahim/CTF-Writeups/blob/main/El-Djazair%20CTF/Reverse%20Engineering/Go%20Get%20It/exploit.py).
+It's ASCII codes manipulation with a base64, we can reverse the process or send the code to AI, and receive a result script (prefferably in python) that generates such a string, the script I received is [this](https://github.com/MedjberAbderrahim/CTF-Writeups/blob/main/El-Djazair%20CTF/Reverse%20Engineering/Go%20Get%20It/solution/exploit.py).
 
 Once I run it, I got the flag:
 ```bash
