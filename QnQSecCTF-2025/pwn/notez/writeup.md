@@ -133,7 +133,7 @@ $
 <div style="page-break-after: always;"></div>
 
 ## **Final Notes**
-This challenge was easy to solve, but its difficulty came from handling the server's bad state, and not printing anything, this can throw off some people, as it did to me at first; if not for the hint from `abd0ghazy`, a player in the `0xL4ugh - Free Palestine` CTF team; saying he "solved the chall as is, even though it doesn't print anything"
+This challenge was easy to solve, but its difficulty came from handling the server's bad state, and not printing anything, this can throw off some people, as it did to me at first; if not for the hint from `abd0ghazy`, a player in the `0xL4ugh - Free Palestine` CTF team; saying he "solved the chall as is, even though it doesn't print anything"; note that our convo was in plain sight of everyone, and happened in pwn channel of discord server, and he only specified that the connection is working, i.e. asking input but not printing output
 
 People who got hit the most by this buffering misconfiguration are probably those who used the stack leak, a bad strategy in my humble opinion, as the stack is always moving and unstable, while the `BSS` in a non-PIE binary is fixed (`0x404000` to `0x405000`); that's a free 0x1000 byte of `RW` space which we are free to use and doesn't require a leak lol.
 
