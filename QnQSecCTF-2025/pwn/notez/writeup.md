@@ -1,8 +1,10 @@
-# Notez - Pwn Challenge Writeup
+# **Notez - Pwn Challenge Writeup**
 
 ## **Challenge Overview**
 - **Category**: Pwn
 - **Synopsis**: This is a stack-based buffer overflow challenge in a note-taking app that segfaults due to improper input handling. The binary reads user input into a global buffer, copies it to a small stack buffer via `memcpy` without bounds checking, and prints it back. This allows overflowing the stack to control the saved RBP and return address. The lack of a stack canary and PIE allows for good ROP opportunities. The exploit involves overwriting the return address to loop back for a second read into a writable global area (The `BSS`), setting up a short ROP chain to trigger a sigreturn syscall, and then using [SROP (Sigreturn Oriented Programming)](https://en.wikipedia.org/wiki/Sigreturn-oriented_programming) to pivot to an `execve("/bin/sh")` syscall for a shell.
+
+- **Written by**: **Spinel99** of **TroJeun**
 
 - **Notes**: The first/original binary had stdout buffering messed up, which made the binary not print anything, which effectively made the stack leak useless, but this solution didn't need/use that leak anyway, so it worked on both the original, messed up version and fixed, updated one. 
 
@@ -23,6 +25,7 @@ PIE:        No PIE (0x400000)
 Stripped:   No
 Debuginfo:  Yes
 ```
+<div style="page-break-after: always;"></div>
 
 ## **Static Analysis (Decompiling)**
 The binary is a simple note-taking app. Decompiling with tools like Ghidra or IDA reveals the core logic in `main()`. Here's the decompiled `main()` function after some name and type improvements:
@@ -58,6 +61,8 @@ We can Check the stack layout of local variables in IDA:
 2. **Lack of Stack Canary**: Allows for easy overwriting of RBP and the return address, as no leaks are needed.
 3. **Fixed Read Size**: Initial read is 48 bytes, but by overwriting return address to loop back to the `read` instruction, we can perform a second read with a larger size by controlling `DWORD PTR [rbp - 0x04]` (The `size` variable) via overflow.
 
+<div style="page-break-after: always;"></div>
+
 ## **Exploitation Strategy**
 1. **Getting Padding Length**:
    - We can inject the full 48 bytes of `size` into the program and see where it crashes, to get exactly the return offset; can automate it using:
@@ -85,6 +90,9 @@ payload += p64(rop.rax.address)
 payload += p64(0x0F)                # set RAX = 0x0F for sigreturn syscall
 payload += p64(rop.syscall.address) # jump to syscall
 ```
+
+<div style="page-break-after: always;"></div>
+
    - Use `pwntools`'s predefined struct for SROP `SigreturnFrame` to setup the correct frame that allows for `execve(b'/bin/sh')`.
 ```python
 # Allows us to return to execve("/bin/sh")
@@ -122,6 +130,7 @@ $
 [*] Interrupted
 [*] Closed connection to 161.97.155.116 port 14337
 ```
+<div style="page-break-after: always;"></div>
 
 ## **Final Notes**
 This challenge was easy to solve, but its difficulty came from handling the server's bad state, and not printing anything, this can throw off some people, as it did to me at first; if not for the hint from `abd0ghazy`, a player in the `0xL4ugh - Free Palestine` CTF team; saying he "solved the chall as is, even though it doesn't print anything"
