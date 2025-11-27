@@ -1,12 +1,12 @@
-# Physical Security Attack: Bypassing Linux Authentication via Boot Parameters
+# **Physical Security Attack: Bypassing Linux Authentication via Boot Parameters**
 
-## Summary
+## **Summary**
 
 This technical write-up demonstrates a critical physical security measure that is often overlooked or neglected in many default Linux installations, including Kali Linux. By modifying boot parameters through the bootloader, an attacker with physical access can obtain root shell access without authentication, completely bypassing the operating system's login mechanisms.
 
 ---
 
-## Background Conext: The Initial Problem
+## **Background Conext: The Initial Problem**
 
 While working with a Kali Linux virtual machine in VirtualBox, I encountered a storage saturation issue that caused the VM to crash (less than 1GB left on Virtual Disk). Upon restart, the kernel logged errors indicating insufficient resources to complete the boot process, preventing access to the standard login screen (`It was at this moment, he knew he...` moment lol).
 
@@ -27,7 +27,7 @@ However, during troubleshooting, I discovered a significant security implication
 
 ---
 
-## The Vulnerability: Boot Parameter Manipulation
+## **The Vulnerability: Boot Parameter Manipulation**
 
 ### What Are Boot Parameters?
 
@@ -55,7 +55,7 @@ Bootloader → Kernel → /bin/bash (root shell) [Authentication bypassed]
 
 ---
 
-## Step-by-Step Exploitation
+## **Step-by-Step Exploitation**
 
 ### Prerequisites
 
@@ -108,7 +108,7 @@ You should see a menu listing available kernel versions and boot options.
 
 ---
 
-## Why This Works: Technical Explanation
+## **Why This Works: Technical Explanation**
 
 ### The Init Parameter
 
@@ -157,7 +157,7 @@ This means:
    ```
 ---
 
-## Real-World Impact – Why This Matters
+## **Real-World Impact – Why This Matters**
 
 ### Vulnerability Scope
 
@@ -174,7 +174,7 @@ An experienced attacker can complete this exploit in under **30 seconds** (liter
 
 ---
 
-## Mitigations and Hardening Measures
+## **Mitigations and Hardening Measures**
 
 This attack vector exists in default configurations, but several security measures can prevent or detect it:
 
@@ -263,9 +263,9 @@ Configure systems to detect boot tampering:
 - Log boot parameter changes
 - Alert on unexpected system reboots
 
----
+<div style="page-break-after: always;"></div>
 
-## Defense in Depth Approach
+## **Defense in Depth Approach**
 
 Physical security should be part of a comprehensive security strategy:
 
@@ -311,15 +311,15 @@ The attack may leave minimal -digital- traces:
 - Modify file timestamps to hide modifications
 - Use memory-only backdoors that don't touch disk
 
----
+<div style="page-break-after: always;"></div>
 
-## Conclusion
+## **Conclusion**
 
 This demonstration reveals a fundamental principle in information security: **physical access often equals root access**. While organizations invest heavily in firewalls, intrusion detection systems, and network security, the physical security layer is sometimes neglected.
 
 ---
 
-## Disclaimer
+## **Disclaimer**
 
 This information is provided for **educational purposes only**. Unauthorized access to computer systems is illegal under laws such as:
 - Computer Fraud and Abuse Act (CFAA) in the United States
@@ -330,7 +330,7 @@ Always obtain explicit written permission before testing security measures on sy
 
 ---
 
-## References and Further Reading
+## **References and Further Reading**
 
 - [GRUB2 Manual - Security](https://www.gnu.org/software/grub/manual/grub/html_node/Security.html)
 - [Linux Kernel Boot Parameters](https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html)
