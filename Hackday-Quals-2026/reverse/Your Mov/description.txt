@@ -1,0 +1,28 @@
+## General description
+- name: Your Mov
+- Category: reverse engineering
+- Event: HackDay 2026 - Qualifications (Academic Only)
+- Link: https://ctftime.org/event/3038
+- Final points: 304 out of 500
+- Tags: hard
+
+## Solving
+We're given a heavily mov-obfuscated x86 32-bits binary:
+```sh
+your_mov: ELF 32-bit LSB executable, Intel i386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, stripped
+```
+
+solving is divided into 2 main stages:
+
+### Stage 01
+- We notice a pattern repeating, where binary loads a constant byte value and does some MOVs with it, this happends for 6 times (not 6 iterations, but 6 large assembly blocks)
+- We notice each byte is the appropriate character of the flag's prefix "HACKDAY{"
+- Further analysis shows the binary doesn't show the same naive approach to compare the rest of the characters
+
+### Stage 02
+- Method used in stage 01 isn't working no more, so we pivot to another method
+- We start using ltrace for dynamic behavioral analysis, to see which library functions got called
+- We notice execution abruptly terminates if the entered input isn't 0x49 bytes long; makes sense as flag is "HACKDAY{SHA256-HASH}", and SHA256 hashes are 32-bytes (64 hex digits) long
+- we try to use the known instructions counting technique (e.g. using perf), but it generates a random amount of instructions each time, which doesn't depend on correct input so far
+- we continue to use ltrace, which shows that if prefix (HACKDAY) is entered correctly, and input is 0x49 bytes long, it'll start comparing byte per byte using memcmp
+- we bruteforce contents of hash between the '{}' (which is a SHA256 ), by picking the hexbyte which generates the most amount of memcmp's
